@@ -7,8 +7,9 @@ function Server(req, res)
   res.setHeader('Content-Type', 'text/plain')
   res.setHeader('X-Ticket', 12345)
   res.writeHead(200)
+  res.write('.')
   setTimeout(function()
   {
     res.end('Hello World\n')
-  }, 1000)
+  }, 3000)
 }
