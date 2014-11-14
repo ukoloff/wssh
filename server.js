@@ -4,6 +4,7 @@ require('http')
 
 function Server(req, res)
 {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
+  res.setHeader('Content-Type', 'text/plain')
+  res.writeHead(200)
+  res.end('Hello World\n')
 }
