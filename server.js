@@ -9,7 +9,7 @@ function Server(req, res)
   res.writeHead(200)
 
   // Write the headers to the socker
-  res.socket.write(res._header);
+  res._writeRaw(res._header);
   // Mark the headers as sent
   res._headerSent = true;
 
