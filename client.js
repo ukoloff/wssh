@@ -17,9 +17,6 @@ function Get(res)
     post = http.request(z)
     post.write(this.read())
     post.write('Line 1\nLine 2\nLine 3\n')
-    this.on('readable', function()
-    {
-      console.log('GET', this.read().toString())
-    })
+    this.pipe(process.stdout)
   })
 }

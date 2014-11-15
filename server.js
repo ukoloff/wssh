@@ -43,7 +43,6 @@ function Get(req, res)
 
 function Post(req, res)
 {
-  console.log('POST')
   req.once('readable', function()
   {
     var s, x = this.read().toString().replace(/^\s+|\s+$/g, '')
@@ -52,8 +51,7 @@ function Post(req, res)
       delete sessions[x]
       clearTimeout(s.t)
       s.r.write('Hi there!\n')
-      var z = responder()
-      req.pipe(z).pipe(s.r)
+      req.pipe(responder()).pipe(s.r)
     }
     else
       res.writeHead(404)
