@@ -43,9 +43,16 @@ function Post(req, res)
   console.log('POST')
   req.once('readable', function()
   {
-    var x = this.read().toString().replace(/^\s+|\s+$/g, '')
-    console.log('Got session:', x)
-    res.writeHead(200)
-    res.write('POST data...')
+    var s, x = this.read().toString().replace(/^\s+|\s+$/g, '')
+    if(s=sessions[x])
+    {
+      delete sessions[x]
+      clearTimeout(s.t)
+      s.r.write('Hi there!\n')
+      res.writeHead(200)
+      res.write('POST data...')
+    }
+    else
+      res.writeHead(404)
   })
 }

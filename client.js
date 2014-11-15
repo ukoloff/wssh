@@ -16,8 +16,11 @@ function Get(res)
     z.method = 'POST'
     var q = http.request(z, Post)
     q.write(this.read())
+    this.on('readable', function()
+    {
+      console.log('GET', this.read())
+    })
   })
-  // res.pipe(process.stdout)
 }
 
 function Post(res)
