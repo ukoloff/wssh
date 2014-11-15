@@ -54,8 +54,6 @@ function Post(req, res)
       s.r.write('Hi there!\n')
       var z = responder()
       req.pipe(z).pipe(s.r)
-      res.writeHead(200)
-      res.write('\n')
     }
     else
       res.writeHead(404)

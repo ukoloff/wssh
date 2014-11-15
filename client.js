@@ -14,17 +14,12 @@ function Get(res)
   {
     var z = url.parse(URL)
     z.method = 'POST'
-    post = http.request(z, Post)
+    post = http.request(z)
     post.write(this.read())
+    post.write('Line 1\nLine 2\nLine 3\n')
     this.on('readable', function()
     {
       console.log('GET', this.read().toString())
     })
   })
-}
-
-function Post(res)
-{
-  console.log('POST')
-  post.write('Line 1\n')
 }
