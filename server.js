@@ -40,5 +40,12 @@ function Get(req, res)
 
 function Post(req, res)
 {
-
+  console.log('POST')
+  req.once('readable', function()
+  {
+    var x = this.read().toString().replace(/^\s+|\s+$/g, '')
+    console.log('Got session:', x)
+    res.writeHead(200)
+    res.write('POST data...')
+  })
 }
