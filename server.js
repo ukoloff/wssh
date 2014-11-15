@@ -2,11 +2,15 @@ require('http')
 .createServer(Server)
 .listen(4567)
 
+noCache = {
+  'Cache-Control': 'no-cache',
+  Pragma: 'no-cache'
+}
+
 function Server(req, res)
 {
   res.setHeader('Content-Type', 'text/plain')
-  res.setHeader('X-Ticket', 12345)
-  res.writeHead(200)
+  res.writeHead(200, noCache)
 
   // Write the headers to the socker
   res._writeRaw(res._header);
