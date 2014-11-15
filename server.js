@@ -1,5 +1,8 @@
-require('http')
-.createServer(Server)
+var
+  http = require('http')
+  responder = require('./responder')
+
+http.createServer(Server)
 .listen(4567)
 
 var
@@ -49,8 +52,10 @@ function Post(req, res)
       delete sessions[x]
       clearTimeout(s.t)
       s.r.write('Hi there!\n')
+      var z = responder()
+      req.pipe(z).pipe(s.r)
       res.writeHead(200)
-      res.write('POST data...')
+      res.write('\n')
     }
     else
       res.writeHead(404)

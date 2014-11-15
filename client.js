@@ -1,8 +1,8 @@
 var
   http = require('http'),
   url = require('url'),
-  URL = 'http://localhost:4567'
-
+  URL = 'http://localhost:4567',
+  post
 
 http.get(URL, Get)
 
@@ -14,11 +14,11 @@ function Get(res)
   {
     var z = url.parse(URL)
     z.method = 'POST'
-    var q = http.request(z, Post)
-    q.write(this.read())
+    post = http.request(z, Post)
+    post.write(this.read())
     this.on('readable', function()
     {
-      console.log('GET', this.read())
+      console.log('GET', this.read().toString())
     })
   })
 }
@@ -26,4 +26,5 @@ function Get(res)
 function Post(res)
 {
   console.log('POST')
+  post.write('Line 1\n')
 }
