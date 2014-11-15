@@ -12,6 +12,11 @@ noCache = {
 
 function Server(req, res)
 {
+  ('POST'==req.method? Post : Get)(req, res)
+}
+
+function Get(req, res)
+{
   var i, r
   for(i = 10; i>0; i--)
     if((r = /\d{3,}/.exec(Math.random())) && !sessions[r = r[0]])
@@ -31,4 +36,9 @@ function Server(req, res)
     }
   res.writeHead(500)
   res.end('Cannot create session!')
+}
+
+function Post(req, res)
+{
+
 }
