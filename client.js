@@ -14,7 +14,7 @@ function Get(res)
     z.method = 'POST'
     post = http.request(z)
     post.write(this.read())
-    post.write('Line 1\nLine 2\nLine 3\n')
     this.pipe(process.stdout)
+    process.stdin.pipe(post)
   })
 }
