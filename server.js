@@ -53,8 +53,12 @@ function Post(req, res)
       clearTimeout(s.t)
       s.r.write('Hi there!\n')
       req.pipe(responder()).pipe(s.r)
+      req.on('end', function(){res.end()})
     }
     else
+    {
       res.writeHead(404)
+      res.end()
+    }
   })
 }
