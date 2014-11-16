@@ -10,7 +10,8 @@ var
 
 noCache = {
   'Cache-Control': 'no-cache',
-  Pragma: 'no-cache'
+  Pragma: 'no-cache',
+  'Content-Type': 'application/octet-stream'
 }
 
 function Server(req, res)
