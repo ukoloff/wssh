@@ -1,20 +1,23 @@
 var
-  http = require('http'),
-  url = require('url'),
-  URL = 'http://localhost:4567',
-  post
+  WebSocket = require('ws')
+  ws = new WebSocket('ws://localhost:4567/ssh')
 
-http.get(URL, Get)
-
-function Get(res)
+ws.on('open', function()
 {
-  res.once('readable', function()
+  console.log('connected')
+  ws.send(Date.now().toString(), {masked: true})
+})
+
+ws.on('close', function()
+{
+  console.log('disconnected')
+})
+
+ws.on('message', function(data, flags)
+{
+  console.log('Got:', data, flags);
+  setTimeout(function()
   {
-    var z = url.parse(URL)
-    z.method = 'POST'
-    post = http.request(z)
-    post.write(this.read())
-    this.pipe(process.stdout)
-    process.stdin.pipe(post)
-  })
-}
+      ws.send(Date.now().toString(), {masked: true})
+  }, 500)
+})
