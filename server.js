@@ -1,64 +1,12 @@
 var
-  http = require('http')
-  responder = require('./responder')
+  ws = require('ws').Server,
+  wss = new ws({port: 4567})
 
-http.createServer(Server)
-.listen(4567)
-
-var
-  sessions={}
-
-noCache = {
-  'Cache-Control': 'no-cache',
-  Pragma: 'no-cache',
-  'Content-Type': 'application/octet-stream'
-}
-
-function Server(req, res)
+wss.on('connection', function(ws)
 {
-  ('POST'==req.method? Post : Get)(req, res)
-}
-
-function Get(req, res)
-{
-  var i, r
-  for(i = 10; i>0; i--)
-    if((r = /\d{3,}/.exec(Math.random())) && !sessions[r = r[0]])
-    {
-      sessions[r] =
-      {
-        r: res,
-        t: setTimeout(function()
-        {
-          delete sessions[r]
-          res.end()
-        }, 5000)
-      }
-      res.writeHead(200, noCache)
-      res.write(r+'\n')
-      return
-    }
-  res.writeHead(500)
-  res.end('Cannot create session!')
-}
-
-function Post(req, res)
-{
-  req.once('readable', function()
+  ws.on('message', function(message)
   {
-    var s, x = this.read().toString().replace(/^\s+|\s+$/g, '')
-    if(s=sessions[x])
-    {
-      delete sessions[x]
-      clearTimeout(s.t)
-      s.r.write('Hi there!\n')
-      req.pipe(responder()).pipe(s.r)
-      req.on('end', function(){res.end()})
-    }
-    else
-    {
-      res.writeHead(404)
-      res.end()
-    }
-  })
-}
+    console.log('received: %s', message)
+  });
+  ws.send('something')
+})
