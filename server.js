@@ -4,9 +4,9 @@ var
 
 wss.on('connection', function(ws)
 {
-  ws.on('message', function(message)
+  ws.on('message', function(message, flags)
   {
-    console.log('received: %s', message)
+    console.log('received: %s', message, flags)
   });
   ws.send('something')
 })
