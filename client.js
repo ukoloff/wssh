@@ -1,6 +1,6 @@
 var
   websocket = require('websocket-stream'),
-  ws = websocket('ws://localhost:4567/ssh')
+  ws = websocket('ws://localhost/ssh')
 
 process.stdin
 .pipe(ws)
