@@ -1,12 +1,13 @@
 var
   ws = require('ws').Server,
+  websocket = require('websocket-stream'),
+  responder = require('./responder'),
   wss = new ws({port: 4567})
 
 wss.on('connection', function(ws)
 {
-  ws.on('message', function(message, flags)
-  {
-    console.log('received: %s', message, flags)
-  });
-  ws.send('something')
+  console.log('Connected')
+  ws = websocket(ws)
+  ws.write('Hello\n')
+  ws.pipe(responder()).pipe(ws)
 })
