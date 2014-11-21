@@ -4,6 +4,26 @@ var
 
 client.on('open', function()
 {
-  process.stdin.on('readable', function(){ client.send(this.read()) })
-  client.on('message', function(data){ process.stdout.write(data) })
+  process.stdin
+  .on('readable', Read)
+  .on('end', Close)
+  .on('error', Close)
+  client
+  .on('message', Msg)
+  .on('close', Close)
 })
+
+function Read()
+{
+  client.send(this.read())
+}
+
+function Msg(data)
+{
+  process.stdout.write(data)
+}
+
+function Close()
+{
+  process.exit()
+}
