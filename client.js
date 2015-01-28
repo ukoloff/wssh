@@ -15,7 +15,9 @@ client.on('open', function()
 
 function Read()
 {
-  client.send(this.read())
+  var x
+  while(null!=(x=this.read()))
+    client.send(x)
 }
 
 function Msg(data)
