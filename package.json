@@ -1,4 +1,15 @@
 {
+  "name": "ssh-thru-nginx",
+  "description": "Try to proxy SSH connection through nginx",
+  "version": "0.0.0",
+  "author": {
+    "name": "Stas Ukolov",
+    "email": "ukoloff@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ukoloff/ssh-thru-nginx"
+  },
   "dependencies": {
     "ws": "^0.4.32",
     "websocket-stream": "^1.1.0"
