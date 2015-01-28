@@ -1,6 +1,6 @@
 var
   ws = require('ws'),
-  client = new ws('ws://localhost:4567/ssh')
+  client = new ws('wss://grid.plugingrid.com/ssh')
 
 client.on('open', function()
 {
