@@ -1,7 +1,7 @@
-ssh-thru-nginx
+wssh
 ==============
 
-Try to proxy SSH connection through nginx
+Try to proxy SSH connection through Websocket
 
 First attemp was using pair of requests (GET+POST), but nginx appeared to always buffering
 user request (server response can be send back unbuffered). So it is impractical :-(
