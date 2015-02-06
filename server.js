@@ -9,31 +9,29 @@ new ws({port: 4567})
 .on('connection', function(ws)
 {
   fs.readFile(__dirname+'/hosts.yml', Hosts)
-  net.connect(22, '10.220.6.10')
-  .on('error', Err)
-  .on('connect', Start)
 
   function Hosts(err, yml)
   {
     if(err)
     {
-      ws.send('Oops: '+err)
-      ws.close()
+      Err(err)
+      return
     }
     try
     {
-      var hosts = yaml.safeLoad(yml)
-      console.log('Connect', ws.upgradeReq.url)
+      net.connect(22, findHost(ws.upgradeReq.url, yml))
+      .on('error', Err)
+      .on('connect', Start)
     }
     catch(e)
     {
-      ws.send('Oops: '+e)
-      ws.close()
+      Err(e)
     }
   }
 
-  function Err()
+  function Err(e)
   {
+    ws.send('Oops:'+e)
     ws.close()
   }
 
@@ -42,3 +40,31 @@ new ws({port: 4567})
     this.pipe(websocket(ws)).pipe(this)
   }
 })
+
+function findHost(url, yml)
+{
+  // Load YAML
+  yml = yaml.safeLoad(yml)
+  // Clean URL
+  url = String(url)
+  .split(/[^-.\w]+/)
+  .filter(id)
+  .filter(goodHost)
+  .reverse()[0]
+  if(url in yml)
+  {
+    var host = yml[url]
+    if(!host) throw Error('Invalid host')
+    return true===host ? url : host
+  }
+}
+
+function id(x)
+{
+  return x
+}
+
+function goodHost(h)
+{
+  return !h.match(/^[-_.]|[-_.]$/)
+}
