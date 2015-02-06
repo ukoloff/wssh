@@ -51,12 +51,24 @@ function findHost(url, yml)
   .filter(id)
   .filter(goodHost)
   .reverse()[0]
+  var host
   if(url in yml)
   {
-    var host = yml[url]
+    host = yml[url]
     if(!host) throw Error('Invalid host')
     return true===host ? url : host
   }
+  for(pat in yml)
+  {
+    var m
+    if(!(m=/^\/(.*)\/(i?)$/.exec(pat))) continue
+    if(!(new RegExp(m[1], m[2]).test(url))) continue
+    m = yml[pat]
+    if(!m) throw Error('Invalid host')
+    host = true===m ? url : m
+  }
+  if(!host) throw Error('Invalid host')
+  return host
 }
 
 function id(x)
