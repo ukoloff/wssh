@@ -1,3 +1,0 @@
-#!/bin/sh
-
-ssh -o ProxyCommand='node ../client.js' TeSt2
