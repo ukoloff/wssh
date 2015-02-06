@@ -1,6 +1,15 @@
 var
   ws = require('ws'),
-  client = new ws('wss://grid.plugingrid.com/ssh')
+  path = require('path')
+
+if(process.argv.length!=3)
+{
+  console.log('Usage:', path.basename(__filename), 'ws[s]://host[:port]/uri')
+  process.exit(1)
+}
+
+var
+  client = new ws(process.argv[2])
 
 client.on('open', function()
 {
