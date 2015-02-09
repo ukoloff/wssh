@@ -7,10 +7,11 @@ var
 
   opt = cmdLine()
 
-  if(!opt.listen)
-    opt.listen = 4567
+if(!opt.listen)
+  opt.listen = 4567
 
-  console.info('Listening for websocket connections on port '+opt.listen+'...')
+console.info('Listening for websocket connections on port '+opt.listen+'...')
+pidSave()
 
 new ws({port: opt.listen})
 .on('connection', function(ws)
@@ -128,4 +129,26 @@ function daemonize(argv, options)
   )
   .unref()
   process.exit()
+}
+
+function pidSave()
+{
+  var
+    f = __dirname+'/tmp/pids/wsshd.pid'
+
+  fs.writeFile(f, process.pid)
+
+  process
+  .on('exit', clear)
+  .on('SIGINT', ctrlC)
+
+  function clear()
+  {
+    fs.unlinkSync(f)
+  }
+
+  function ctrlC()
+  {
+    process.exit()
+  }
 }
