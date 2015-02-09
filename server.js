@@ -164,7 +164,7 @@ function log()
     d = new Date()
     console.info.apply(
       console,
-      ['['+d.toISOString().replace('T', ' ').replace(/[.].*/, '')
+      ['['+d.toISOString().replace('T', ' ').replace(/Z$/, '')
           +d.toTimeString().split(/\s+/)[1].replace(/^\w+/, ' ')+']']
       .concat([].slice.call(arguments)))
 }
