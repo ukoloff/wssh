@@ -10,7 +10,7 @@ var
 if(!opt.listen)
   opt.listen = 4567
 
-console.info('Listening for websocket connections on port '+opt.listen+'...')
+log('Listening for websocket connections on port '+opt.listen+'...')
 pidSave()
 
 new ws({port: opt.listen})
@@ -117,6 +117,7 @@ function showVer()
 
 function daemonize(argv, options)
 {
+  log('Going on in background...')
   out = fs.openSync(__dirname+'/log/wsshd.log', 'a'),
   opts = options.listen ? ['--listen='+options.listen] : []
   require('child_process').spawn(
@@ -144,6 +145,7 @@ function pidSave()
 
   function clear()
   {
+    log('Exiting')
     fs.unlinkSync(f)
   }
 
@@ -151,4 +153,14 @@ function pidSave()
   {
     process.exit()
   }
+}
+
+function log()
+{
+  var
+    d = new Date()
+    console.info.apply(
+      console,
+      ['['+d.toISOString().replace('T', ' ').replace(/[.].*/, '')+d.toTimeString().split(/\s+/)[1].replace(/^\w+/, '')+']']
+      .concat([].slice.call(arguments)))
 }
