@@ -16,6 +16,7 @@ pidSave()
 new ws({port: opt.listen})
 .on('connection', function(ws)
 {
+  log('Request', ws.upgradeReq.url)
   fs.readFile(__dirname+'/hosts.yml', Hosts)
 
   function Hosts(err, yml)
@@ -27,7 +28,9 @@ new ws({port: opt.listen})
     }
     try
     {
-      net.connect(22, findHost(ws.upgradeReq.url, yml))
+      var host = findHost(ws.upgradeReq.url, yml)
+      log('Connecting to', host)
+      net.connect(22, host)
       .on('error', Err)
       .on('connect', Start)
     }
