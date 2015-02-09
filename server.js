@@ -1,15 +1,18 @@
 var
   fs = require('fs'),
-  net = require('net')
+  net = require('net'),
+  yaml = require('js-yaml'),
   ws = require('ws').Server,
   websocket = require('websocket-stream'),
-  yaml = require('js-yaml')
 
-console.log(cmdLine())
+  opt = cmdLine()
 
-process.exit()
+  if(!opt.listen)
+    opt.listen = 4567
 
-new ws({port: 4567})
+  console.info('Listening for websocket connections on port '+opt.listen+'...')
+
+new ws({port: opt.listen})
 .on('connection', function(ws)
 {
   fs.readFile(__dirname+'/hosts.yml', Hosts)
@@ -99,7 +102,7 @@ function cmdLine()
   var opt = z.parseSystem()
 
   if(!opt.argv.length)
-    return opt
+    return opt.options
 
   z.showHelp()
   process.exit()
@@ -111,8 +114,18 @@ function showVer()
   process.exit()
 }
 
-function daemonize()
+function daemonize(argv, options)
 {
-  console.log('DAEMON')
+  out = fs.openSync(__dirname+'/log/wsshd.log', 'a'),
+  opts = options.listen ? ['--listen='+options.listen] : []
+  require('child_process').spawn(
+    process.argv[0],
+    [__filename].concat(opts),
+    {
+      detached: true,
+      stdio: ['ignore', out, out]
+    }
+  )
+  .unref()
   process.exit()
 }
