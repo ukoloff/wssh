@@ -5,6 +5,10 @@ var
   websocket = require('websocket-stream'),
   yaml = require('js-yaml')
 
+console.log(cmdLine())
+
+process.exit()
+
 new ws({port: 4567})
 .on('connection', function(ws)
 {
@@ -79,4 +83,36 @@ function id(x)
 function goodHost(h)
 {
   return !h.match(/^[-_.]|[-_.]$/)
+}
+
+function cmdLine()
+{
+  var z = require('node-getopt').create([
+    ['l', 'listen=X', 'Listen to port'],
+    ['d', 'daemon', 'Run daemonized'],
+    ['h', 'help', 'Show this help'],
+    ['v', 'version', 'Show version'],
+  ])
+  .bindHelp()
+  .on('version', showVer)
+  .on('daemon', daemonize)
+  var opt = z.parseSystem()
+
+  if(!opt.argv.length)
+    return opt
+
+  z.showHelp()
+  process.exit()
+}
+
+function showVer()
+{
+  console.log(require('./package').version)
+  process.exit()
+}
+
+function daemonize()
+{
+  console.log('DAEMON')
+  process.exit()
 }
