@@ -4,7 +4,13 @@ var
 
 if(process.argv.length!=3)
 {
-  console.log('Usage:', path.basename(__filename), 'ws[s]://host[:port]/uri')
+  console.info('Websocket netcat.')
+  console.info(
+    'Usage:',
+    path.basename(process.argv[0]),
+    path.basename(__filename),
+    'ws[s]://host[:port]/uri'
+  )
   process.exit(1)
 }
 
