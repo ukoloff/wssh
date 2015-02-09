@@ -15,5 +15,6 @@ in nginx since v1.3.13.
 
 ## Credits
 
+  * [nginx](http://nginx.org/)
   * [Node.js](http://nodejs.org/)
   * [ws](https://github.com/websockets/ws)
