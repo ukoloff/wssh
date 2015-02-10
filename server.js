@@ -3,7 +3,6 @@ var
   net = require('net'),
   yaml = require('js-yaml'),
   ws = require('ws').Server,
-  websocket = require('websocket-stream'),
 
   opt = cmdLine()
 
@@ -18,7 +17,17 @@ new ws({port: opt.listen})
 
 function req(ws)
 {
+  var
+    ssh,
+    buf = []
+
   log('Request', ws.upgradeReq.url)
+
+  ws
+  .on('message', wsMsg)
+  .on('close', wsClose)
+  .on('error', wsError)
+
   fs.readFile(__dirname+'/hosts.yml', Hosts)
 
   function Hosts(err, yml)
@@ -32,7 +41,9 @@ function req(ws)
       log('Connecting to', host)
       net.connect(22, host)
       .on('error', Err)
-      .on('connect', Start)
+      .on('connect', sshOpen)
+      .on('readable', sshRead)
+      .on('close', sshClose)
     }
     catch(e)
     {
@@ -47,9 +58,51 @@ function req(ws)
     ws.close()
   }
 
-  function Start()
+  function wsMsg(data)
   {
-    this.pipe(websocket(ws)).pipe(this)
+    if(buf)
+      buf.push(data)
+    else
+      ssh.write(data)
+  }
+
+  function wsClose()
+  {
+    log('Client closed connection')
+    sshQuit()
+  }
+
+  function wsError(e)
+  {
+    log('Websocket error', e)
+    sshQuit()
+  }
+
+  function sshQuit()
+  {
+    if(ssh)
+      ssh.end()
+  }
+
+  function sshClose()
+  {
+    log('SSH server closed connection')
+    ws.terminate()
+  }
+
+  function sshOpen()
+  {
+    log('Connected to SSH server')
+    ssh = this
+    buf.forEach(function(data){ ssh.write(data) })
+    buf = null
+  }
+
+  function sshRead()
+  {
+    var x
+    while(null!=(x=this.read()))
+      ws.send(x)
   }
 }
 
