@@ -149,7 +149,7 @@ function goodHost(h)
 function cmdLine()
 {
   var z = require('node-getopt').create([
-    ['l', 'listen=X', 'Listen to port'],
+    ['l', 'listen=', 'Listen to port'],
     ['d', 'daemon', 'Run daemonized'],
     ['h', 'help', 'Show this help'],
     ['v', 'version', 'Show version'],
