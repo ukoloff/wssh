@@ -1,9 +1,8 @@
-var
-  ws = require('ws'),
-  path = require('path')
-
 if(process.argv.length!=3)
 {
+  var
+    path = require('path')
+
   console.info('Websocket netcat.')
   console.info(
     'Usage:',
@@ -15,6 +14,7 @@ if(process.argv.length!=3)
 }
 
 var
+  ws = require('ws'),
   buf = [],
   client = new ws(process.argv[2])
 
