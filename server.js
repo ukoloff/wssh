@@ -149,7 +149,7 @@ function goodHost(h)
 function cmdLine()
 {
   var z = require('node-getopt').create([
-    ['l', 'listen=', 'Listen to port'],
+    ['l', 'listen=port', 'Listen to port'],
     ['d', 'daemon', 'Run daemonized'],
     ['h', 'help', 'Show this help'],
     ['v', 'version', 'Show version'],
@@ -176,7 +176,7 @@ function daemonize(argv, options)
 {
   log('Going on in background...')
   out = fs.openSync(__dirname+'/log/wsshd.log', 'a'),
-  opts = options.listen ? ['--listen='+options.listen] : []
+  opts = options.listen ? ['--listen', options.listen] : []
   require('child_process').spawn(
     process.argv[0],
     [__filename].concat(opts),
