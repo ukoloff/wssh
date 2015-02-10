@@ -15,27 +15,37 @@ if(process.argv.length!=3)
 }
 
 var
+  buf = [],
   client = new ws(process.argv[2])
 
-client.on('open', function()
-{
-  process.stdin
-  .on('readable', Read)
-  .on('end', Close)
-  .on('error', Close)
-  client
-  .on('message', Msg)
-  .on('close', Close)
-})
+process.stdin
+.on('readable', stdioRead)
+.on('end', Close)
+.on('error', Close)
 
-function Read()
+client
+.on('open', wsOpen)
+.on('message', wsMsg)
+.on('close', Close)
+.on('error', Close)
+
+function stdioRead()
 {
   var x
   while(null!=(x=this.read()))
-    client.send(x)
+    if(buf)
+      buf.push(x)
+    else
+      client.send(x)
 }
 
-function Msg(data)
+function wsOpen()
+{
+  buf.forEach(function(data){ client.send(data) })
+  buf = null
+}
+
+function wsMsg(data)
 {
   process.stdout.write(data)
 }
