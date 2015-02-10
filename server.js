@@ -14,7 +14,9 @@ log('Listening for websocket connections on port '+opt.listen+'...')
 pidSave()
 
 new ws({port: opt.listen})
-.on('connection', function(ws)
+.on('connection', req)
+
+function req(ws)
 {
   log('Request', ws.upgradeReq.url)
   fs.readFile(__dirname+'/hosts.yml', Hosts)
@@ -22,10 +24,8 @@ new ws({port: opt.listen})
   function Hosts(err, yml)
   {
     if(err)
-    {
-      Err(err)
-      return
-    }
+      return Err(err)
+
     try
     {
       var host = findHost(ws.upgradeReq.url, yml)
@@ -42,7 +42,8 @@ new ws({port: opt.listen})
 
   function Err(e)
   {
-    ws.send('Oops:'+e)
+    log('Error', e)
+    ws.send('Oops: '+e)
     ws.close()
   }
 
@@ -50,7 +51,7 @@ new ws({port: opt.listen})
   {
     this.pipe(websocket(ws)).pipe(this)
   }
-})
+}
 
 function findHost(url, yml)
 {
