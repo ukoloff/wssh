@@ -11,7 +11,8 @@ in nginx since v1.3.13.
 
 ## See also
 
-  * [wssh.py](https://github.com/progrium/wssh)
+  * [Ruby port](https://github.com/ukoloff/em-wssh)
+  * [Python version](https://github.com/progrium/wssh)
 
 ## Credits
 
