@@ -64,7 +64,7 @@ function daemonize(argv, options)
   opts = options.listen ? ['--listen', options.listen] : []
   require('child_process').spawn(
     process.argv[0],
-    [__filename].concat(opts),
+    [__filename].concat(opts).concat(argv),
     {
       detached: true,
       stdio: ['ignore', out, out]
