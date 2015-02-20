@@ -1,3 +1,8 @@
+//
+// WSSH client
+//
+// Cannot be run as a child on Windows (bug with stdio), only testing there
+//
 if(process.argv.length!=3)
 {
   var
