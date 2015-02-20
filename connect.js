@@ -11,13 +11,12 @@ var
 if(!opt.listen)
   opt.listen = 3122
 
-
 log('Running on port', opt.listen, 'sending to', opt.uri)
 
 pidSave()
 
 net.createServer(Req)
-.listen(8022, On)
+.listen(opt.listen, On)
 
 function On()
 {
@@ -26,6 +25,7 @@ function On()
 
 function Req(conn)
 {
+  log("Client connected from", conn.remoteAddress+':'+conn.remotePort)
 }
 
 function cmdLine()
