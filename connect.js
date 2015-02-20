@@ -26,6 +26,26 @@ function On()
 function Req(conn)
 {
   log("Client connected from", conn.remoteAddress+':'+conn.remotePort)
+
+  conn
+  .on('readable', cRead)
+  .on('end', cClose)
+  .on('error', cError)
+
+  function cRead()
+  {
+
+  }
+
+  function cClose()
+  {
+    log('Client disconnected')
+  }
+
+  function cError(e)
+  {
+    log('Client error', e)
+  }
 }
 
 function cmdLine()
