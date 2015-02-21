@@ -30,6 +30,18 @@ WSSH session is:
 
 And nginx stage can be omited in development/testing scenarios.
 
+In some scenarios this path can be even longer:
+
+  * SSH Client, capable to connect via HTTP proxy (eg PuTTY/PLink)
+  * TCP connection to local proxy
+  * connect.js listening to dedicated port (3122 by default)
+  * Websocket (HTTP/HTTPS) connection to nginx
+  * nginx [configured](nginx/ssh) to redirect connection to WSSH server
+  * Another Websocket connection from nginx to WSSH server
+  * WSSH server, listening to dedicated TCP port (4567 by default)
+  * Normal TCP connection
+  * Normal SSH Server, listening on TCP port 22
+
 ## Windows bugs
 
 Node.js has some strange bug when working with MS Windows STDIN.
