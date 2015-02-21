@@ -4,7 +4,7 @@
 var
   fs = require('fs'),
   net = require('net'),
-  ws = require('ws'),
+  webSocket = require('ws'),
 
   opt = cmdLine()
 
@@ -25,6 +25,9 @@ function On()
 
 function Req(conn)
 {
+  var
+    nhdr = 0, hdrs, body, host, ws
+
   log("Client connected from", conn.remoteAddress+':'+conn.remotePort)
 
   conn
@@ -34,17 +37,109 @@ function Req(conn)
 
   function cRead()
   {
-
+    var x
+    while(null!=(x=this.read()))
+      body ? wssh(x) : headers(x)
   }
 
   function cClose()
   {
     log('Client disconnected')
+    closeWs()
   }
 
   function cError(e)
   {
     log('Client error', e)
+    closeWs()
+  }
+
+  function closeWs()
+  {
+    if(ws)
+      ws.close()
+  }
+
+  function wssh(data)
+  {
+    if(data.length)
+      ws.send(data)
+  }
+
+  function headers(data)
+  {
+    hdrs = hdrs ? Buffer.concat([hdrs, data]) : data
+    while(splitHdrs()){}
+  }
+
+  function splitHdrs()
+  {
+    for(var cr, L=hdrs.length, i=0; i<L; i++)
+      if(10==hdrs[i])
+      {
+        L = hdrs
+        hdrs = hdrs.slice(i+1)
+        header(L.slice(0, i-(cr ? 1 : 0)).toString())
+        return true
+      }
+      else
+        cr = 13==hdrs[i]
+  }
+
+  function header(s)
+  {
+    if(!nhdr++)
+      connect(s)
+    else if(!s)
+      wssh_connect()
+  }
+
+  function connect(s)
+  {
+    var m=/^connect\s+([-.\w]+):22(?:\s|$)/i.exec(s)
+    if(m)
+      return host=m[1]
+    conn.end("HTTP/1.0 500 Bad request\r\n\r\n")
+  }
+
+  function wssh_connect()
+  {
+    var uri = opt.uri+'/'+host
+    log("Redirect to", uri)
+    body = hdrs
+    hdrs = new Buffer(0)
+    conn.write("HTTP/1.0 200 Ok\r\n\r\n")
+    ws = new webSocket(uri)
+    ws
+    .on('open', wsOpen)
+    .on('message', wsMsg)
+    .on('close', wsClose)
+    .on('error', wsError)
+  }
+
+  function wsOpen()
+  {
+    log("Connected to WSSHD")
+    wssh(body)
+    body = true
+  }
+
+  function wsMsg(data)
+  {
+    conn.write(data)
+  }
+
+  function wsClose()
+  {
+    log("Websocket closed")
+    conn.end()
+  }
+
+  function wsError(e)
+  {
+    log("Websocket error", e)
+    conn.end()
+    ws.close()
   }
 }
 
