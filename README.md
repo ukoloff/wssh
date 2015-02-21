@@ -60,3 +60,4 @@ So, on MS Windows, one should use connect.js and PuTTY/PLink via HTTP proxy
   * [nginx](http://nginx.org/)
   * [Node.js](http://nodejs.org/)
   * [ws](https://github.com/websockets/ws)
+  * [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/)
