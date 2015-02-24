@@ -39,7 +39,7 @@ function Req(conn)
   {
     var x
     while(null!=(x=this.read()))
-      body ? wssh(x) : headers(x)
+      body ? through(x) : headers(x)
   }
 
   function cClose()
@@ -64,6 +64,14 @@ function Req(conn)
   {
     if(data.length)
       ws.send(data)
+  }
+
+  function through(data)
+  {
+    if(Array.isArray(body))
+      body.push(data)
+    else
+      wssh(data)
   }
 
   function headers(data)
@@ -106,7 +114,7 @@ function Req(conn)
   {
     var uri = opt.uri+'/'+host
     log("Redirect to", uri)
-    body = hdrs
+    body = [hdrs]
     hdrs = new Buffer(0)
     conn.write("HTTP/1.0 200 Ok\r\n\r\n")
     ws = new webSocket(uri)
@@ -120,7 +128,7 @@ function Req(conn)
   function wsOpen()
   {
     log("Connected to WSSHD")
-    wssh(body)
+    body.forEach(wssh)
     body = true
   }
 
