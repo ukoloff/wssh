@@ -9,7 +9,7 @@ if(3!=process.argv.length) help()
 var Host = process.argv[2]
 
 net.createServer(Req)
-.listen(3123, On)
+.listen(4567, On)
 
 var
   Count=0,
