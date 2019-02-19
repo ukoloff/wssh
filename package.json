@@ -1,7 +1,7 @@
 {
   "name": "wssh",
   "description": "Try to proxy SSH connection through websocket-stream",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "Stas Ukolov",
     "email": "ukoloff@gmail.com"
@@ -11,8 +11,8 @@
     "url": "https://github.com/ukoloff/wssh"
   },
   "dependencies": {
-    "node-getopt": "^0.2.3",
+    "node-getopt": "^0.3.2",
     "js-yaml": "^3.2.5",
-    "ws": "^0.7.0"
+    "ws": "^6.1.4"
   }
 }

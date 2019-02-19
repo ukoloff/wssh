@@ -15,13 +15,13 @@ pidSave()
 new ws({port: opt.listen})
 .on('connection', req)
 
-function req(ws)
+function req(ws, req)
 {
   var
     ssh,
     buf = []
 
-  log('Request', ws.upgradeReq.url)
+  log('Request', req.url)
 
   ws
   .on('message', wsMsg)
@@ -37,7 +37,7 @@ function req(ws)
 
     try
     {
-      var host = findHost(ws.upgradeReq.url, yml)
+      var host = findHost(req.url, yml)
       log('Connecting to', host)
       net.connect(22, host)
       .on('error', Err)
@@ -194,7 +194,7 @@ function pidSave()
   var
     f = __dirname+'/tmp/pids/wsshd.pid'
 
-  fs.writeFile(f, process.pid)
+  fs.writeFile(f, process.pid, none)
 
   process
   .on('exit', clear)
@@ -221,4 +221,7 @@ function log()
       ['['+d.toISOString().replace('T', ' ').replace(/Z$/, '')
           +d.toTimeString().split(/\s+/)[1].replace(/^\w+/, ' ')+']']
       .concat([].slice.call(arguments)))
+}
+
+function none() {
 }
